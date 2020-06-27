@@ -8,9 +8,10 @@
     "dev": "nuxt",
     "build": "nuxt build",
     "start": "nuxt start",
-    "generate": "nuxt generate",
-    "export": "nuxt export",
+    "generate": "nuxt generate && yarn deploy",
+    "export": "nuxt export && yarn deploy",
     "serve": "nuxt serve",
+    "deploy": "cp -r ./dist/* ../../turkey/public_html/app",
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore ."
   },
   "lint-staged": {
