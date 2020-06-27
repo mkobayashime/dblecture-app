@@ -1,10 +1,10 @@
 <template lang="pug">
   .container
-    theProfile
-    theClasses
-    theTasks
-    theTaskDetail
-    theActivity
+    theProfile(:userId="userId")
+    theClasses(:userId="userId")
+    theTasks(:userId="userId")
+    theTaskDetail(:userId="userId")
+    theActivity(:userId="userId")
 </template>
 
 <script>
@@ -15,6 +15,11 @@ export default {
     theTasks: () => import("~/components/theTasks.vue"),
     theTaskDetail: () => import("~/components/theTaskDetail.vue"),
     theActivity: () => import("~/components/theActivity.vue")
+  },
+  data() {
+    return {
+      userId: "202099999"
+    }
   }
 }
 </script>
