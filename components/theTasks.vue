@@ -69,15 +69,16 @@ export default {
       padding: .7rem 0rem
       transition: background 200ms linear
       cursor: pointer
+      border-radius: .5rem
       &:hover
         background-color: #eee
       &::before
         content: ""
         position: absolute
-        width: 100%
+        width: calc(100% - 1rem)
         height: 1px
         top: 100%
-        left: 0
+        left: .5rem
         background-color: #eee
       &:last-of-type
         &::before
@@ -87,7 +88,6 @@ export default {
         flex-shrink: 0
       .name
         width: 50%
-        font-weight: 700
       .class
         width: 30%
         font-size: .8rem

@@ -14,10 +14,12 @@ export default {}
   padding: 2rem
   .name
     font-size: 1.5rem
+    font-weight: 700
     .id
       font-size: 1rem
       margin-left: .5em
       color: #9e9e9e
+      font-weight: 400
   .dept
     font-size .5rem
 </style>
