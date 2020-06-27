@@ -1,68 +1,48 @@
-<template>
-  <div class="container">
-    <div>
-      <logo />
-      <h1 class="title">
-        dblecture-app
-      </h1>
-      <h2 class="subtitle">
-        My well-made Nuxt.js project
-      </h2>
-      <div class="links">
-        <a href="https://nuxtjs.org/" target="_blank" class="button--green">
-          Documentation
-        </a>
-        <a
-          href="https://github.com/nuxt/nuxt.js"
-          target="_blank"
-          class="button--grey"
-        >
-          GitHub
-        </a>
-      </div>
-    </div>
-  </div>
+<template lang="pug">
+  .container
+    theProfile
+    theClasses
+    theTasks
+    theTaskDetail
+    theActivity
 </template>
 
 <script>
-import Logo from '~/components/Logo.vue'
-
 export default {
   components: {
-    Logo
+    theProfile: () => import("~/components/theProfile.vue"),
+    theClasses: () => import("~/components/theClasses.vue"),
+    theTasks: () => import("~/components/theTasks.vue"),
+    theTaskDetail: () => import("~/components/theTaskDetail.vue"),
+    theActivity: () => import("~/components/theActivity.vue")
   }
 }
 </script>
 
-<style>
-.container {
-  margin: 0 auto;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-}
-
-.title {
-  font-family: 'Quicksand', 'Source Sans Pro', -apple-system, BlinkMacSystemFont,
-    'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  display: block;
-  font-weight: 300;
-  font-size: 100px;
-  color: #35495e;
-  letter-spacing: 1px;
-}
-
-.subtitle {
-  font-weight: 300;
-  font-size: 42px;
-  color: #526488;
-  word-spacing: 5px;
-  padding-bottom: 15px;
-}
-
-.links {
-  padding-top: 15px;
-}
+<style lang="sass">
+.container
+  position: absolute
+  width: 100%
+  height: 100%
+  left: 0
+  top: 0
+  display: grid
+  grid-template-rows: 6rem auto 35%
+  grid-template-columns: 20rem auto 30rem
+  background-color: #eee
+  #the-profile
+    grid-row: 1/2
+    grid-column: 1/2
+  #the-classes
+    grid-row: 2/-1
+    grid-column: 1/2
+  #the-tasks
+    grid-row: 1/-1
+    grid-column: 2/3
+  #the-task-detail
+    grid-row: 1/3
+    grid-column: -2/-1
+  #the-activity
+    grid-row: -2/-1
+    grid-column: -2/-1
 </style>
