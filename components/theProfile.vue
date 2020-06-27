@@ -1,12 +1,40 @@
 <template lang="pug">
   #the-profile
-    .name 筑波太郎
-      span.id #202011111
-    .dept 情報メディア創成学類
+    .name {{ profile.userName }}
+      span.id {{ `#${userId}` }}
+    .dept {{ profile.deptName }}
 </template>
 
 <script>
-export default {}
+export default {
+  props: {
+    userId: {
+      type: Number,
+      default: 0
+    }
+  },
+  data() {
+    return {
+      profile: {}
+    }
+  },
+  mounted() {
+    this.load()
+  },
+  methods: {
+    async load() {
+      const res = await this.$axios.$get(
+        "http://turkey.slis.tsukuba.ac.jp/~s2010127/api/profile.php",
+        {
+          params: {
+            userId: this.userId
+          }
+        }
+      )
+      this.profile = res
+    }
+  }
+}
 </script>
 
 <style lang="sass" scoped>
