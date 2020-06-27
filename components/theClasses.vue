@@ -1,23 +1,82 @@
 <template lang="pug">
   #the-classes
-    input(type="text" placeholder="科目を追加")
+    .input
+      input(type="text" :class="{ 'class-name': true, error: newClass.classNameError }" placeholder="科目を追加（科目名）" v-model="newClass.className" @keyup.enter="focusClassIdInput")
+      input(type="text" :class="{ 'class-id': true, error: newClass.classIdError }" placeholder="科目番号" v-model="newClass.classId" @keyup.enter="validateNewClass")
     ul
       li.class(v-for="item in classes" :key="item.id")
-        a {{ item }}
+        a {{ item.className }}
 </template>
 
 <script>
 export default {
+  props: {
+    userId: {
+      type: Number,
+      default: 0
+    }
+  },
   data() {
     return {
-      classes: [
-        "データ工学概論",
-        "情報リテラシー(講義)",
-        "知能と情報科学",
-        "情報数学A",
-        "情報メディア入門B",
-        "線形代数A"
-      ]
+      classes: [],
+      newClass: {
+        classId: "",
+        classIdError: false,
+        className: "",
+        classNameError: false
+      }
+    }
+  },
+  mounted() {
+    this.load()
+  },
+  methods: {
+    async load() {
+      const res = await this.$axios.$get(
+        "http://turkey.slis.tsukuba.ac.jp/~s2010127/api/class.php",
+        {
+          params: {
+            userId: this.userId
+          }
+        }
+      )
+      this.classes = res
+    },
+    validateNewClass() {
+      const match = new RegExp("^[A-Z0-9]{7}$")
+      if (!match.test(this.newClass.classId)) {
+        this.newClass.classIdError = true
+      } else {
+        this.newClass.classIdError = false
+      }
+
+      if (!this.newClass.className.length > 0) {
+        this.newClass.classNameError = true
+      } else {
+        this.newClass.classNameError = false
+      }
+
+      if (!this.newClass.classIdError && !this.newClass.classNameError) {
+        this.addNewClass()
+      }
+    },
+    async addNewClass() {
+      const params = new URLSearchParams()
+      params.append("userId", this.userId)
+      params.append("classId", this.newClass.classId)
+      params.append("className", this.newClass.className)
+
+      const res = await this.$axios.$post(
+        "http://turkey.slis.tsukuba.ac.jp/~s2010127/api/class.php",
+        params
+      )
+      this.classes = res
+
+      document.activeElement.blur()
+      this.newClass = {}
+    },
+    focusClassIdInput() {
+      document.querySelector(".input .class-id").focus()
     }
   }
 }
@@ -30,17 +89,31 @@ export default {
   padding: 2rem
   margin: 2rem
   border-radius: 2rem
-  input
+  .input
+    position: relative
     display: block
-    width: calc(100%)
+    width: 100%
     height: 2.5rem
     margin: 0 auto 1rem
-    padding: 1rem
-    border: none
+    padding: 0 1rem
     border-radius: .5rem
     background-color: #eee
-    &:focus
+    overflow: hidden
+    transition: height 200ms ease-in-out
+    input
+      position: absolute
+      height: 2.5rem
+      border: none
+      background-color: #eee
       outline: none
+    .class-name
+      top: 0
+    .class-id
+      top: 2.5rem
+    &:focus-within
+      height: 5rem
+  .error
+    color: #e53935
   ul
     list-style: none
     display: flex
