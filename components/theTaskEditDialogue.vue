@@ -26,6 +26,12 @@
 <script>
 import { mapGetters, mapMutations } from "vuex"
 export default {
+  props: {
+    userId: {
+      type: Number,
+      default: 0
+    }
+  },
   data() {
     return {
       newTask: {
@@ -48,12 +54,16 @@ export default {
   },
   computed: {
     ...mapGetters({
-      classes: "classes/classes"
+      classes: "classes/classes",
+      classIds: "classes/classIds",
+      classNames: "classes/classNames",
+      tasks: "tasks/tasks"
     })
   },
   methods: {
     ...mapMutations({
-      toggleTaskEditDialogue: "taskEditDialogue/toggle"
+      toggleTaskEditDialogue: "taskEditDialogue/toggle",
+      updateTaskData: "tasks/update"
     }),
     validateTaskName() {
       if (this.newTask.taskName.length > 0) {
@@ -91,7 +101,7 @@ export default {
       }
     },
     validateDeadlineHour() {
-      if (this.newTask.deadlineHour > 0 && this.newTask.deadlineHour <= 24) {
+      if (this.newTask.deadlineHour >= 0 && this.newTask.deadlineHour <= 24) {
         this.newTask.deadlineHourError = false
       } else {
         this.newTask.deadlineHourError = true
@@ -99,7 +109,7 @@ export default {
     },
     validateDeadlineMinute() {
       if (
-        this.newTask.deadlineMinute > 0 &&
+        this.newTask.deadlineMinute >= 0 &&
         this.newTask.deadlineMinute <= 60
       ) {
         this.newTask.deadlineMinuteError = false
@@ -128,7 +138,25 @@ export default {
       )} ${this.getDoubleDigits(
         this.newTask.deadlineHour
       )}:${this.getDoubleDigits(this.newTask.deadlineMinute)}:00`
-      console.log(datetime)
+
+      const indexOfClassName = this.classNames.indexOf(this.newTask.taskClass)
+      const taskClassId = this.classIds[indexOfClassName]
+
+      const params = new URLSearchParams()
+      params.append("userId", this.userId)
+      params.append("taskName", this.newTask.taskName)
+      params.append("taskClassId", taskClassId)
+      params.append("taskDeadline", datetime)
+
+      this.$axios
+        .$post(
+          "http://turkey.slis.tsukuba.ac.jp/~s2010127/api/task.php",
+          params
+        )
+        .then((res) => {
+          this.updateTaskData(res)
+          this.toggleTaskEditDialogue()
+        })
     },
     getDoubleDigits(num) {
       return ("0" + num).slice(-2)
@@ -197,4 +225,5 @@ export default {
       height: 1.5rem
       top: 2rem
       right: 2rem
+      cursor: pointer
 </style>
