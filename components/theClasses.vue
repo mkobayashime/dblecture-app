@@ -9,6 +9,7 @@
 </template>
 
 <script>
+import { mapGetters, mapMutations } from "vuex"
 export default {
   props: {
     userId: {
@@ -18,7 +19,6 @@ export default {
   },
   data() {
     return {
-      classes: [],
       newClass: {
         classId: "",
         classIdError: false,
@@ -27,10 +27,18 @@ export default {
       }
     }
   },
+  computed: {
+    ...mapGetters({
+      classes: "classes/classes"
+    })
+  },
   mounted() {
     this.load()
   },
   methods: {
+    ...mapMutations({
+      updateClassesData: "classes/update"
+    }),
     async load() {
       const res = await this.$axios.$get(
         "http://turkey.slis.tsukuba.ac.jp/~s2010127/api/class.php",
@@ -40,7 +48,7 @@ export default {
           }
         }
       )
-      this.classes = res
+      this.updateClassesData(res)
     },
     validateNewClass() {
       const match = new RegExp("^[A-Z0-9]{7}$")
