@@ -68,20 +68,23 @@ export default {
         this.addNewClass()
       }
     },
-    async addNewClass() {
+    addNewClass() {
       const params = new URLSearchParams()
       params.append("userId", this.userId)
       params.append("classId", this.newClass.classId)
       params.append("className", this.newClass.className)
 
-      const res = await this.$axios.$post(
-        "http://turkey.slis.tsukuba.ac.jp/~s2010127/api/class.php",
-        params
-      )
-      this.classes = res
+      this.$axios
+        .$post(
+          "http://turkey.slis.tsukuba.ac.jp/~s2010127/api/class.php",
+          params
+        )
+        .then((res) => {
+          this.updateClassesData(res)
 
-      document.activeElement.blur()
-      this.newClass = {}
+          document.activeElement.blur()
+          this.newClass = {}
+        })
     },
     focusClassIdInput() {
       document.querySelector(".input .class-id").focus()
