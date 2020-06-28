@@ -4,7 +4,7 @@
       input(type="text" :class="{ 'class-name': true, error: newClass.classNameError }" placeholder="科目を追加（科目名）" v-model="newClass.className" @keyup.enter="focusClassIdInput")
       input(type="text" :class="{ 'class-id': true, error: newClass.classIdError }" placeholder="科目番号" v-model="newClass.classId" @keyup.enter="validateNewClass")
     ul
-      li.class(v-for="item, index in classes" :key="item.id" @click="selectClass(index)" :class="{ selected: isSelected(index) }")
+      li.class(v-for="item, index in classes" :key="item.id" @click="onClick(index)" :class="{ selected: isSelected(index) }")
         a {{ item.className }}
 </template>
 
@@ -39,7 +39,8 @@ export default {
   methods: {
     ...mapMutations({
       updateClassesData: "classes/update",
-      selectClass: "classes/select"
+      selectClass: "classes/select",
+      selectTask: "tasks/select"
     }),
     async load() {
       const res = await this.$axios.$get(
@@ -87,6 +88,10 @@ export default {
           document.activeElement.blur()
           this.newClass = {}
         })
+    },
+    onClick(index) {
+      this.selectClass(index)
+      this.selectTask(0)
     },
     focusClassIdInput() {
       document.querySelector(".input .class-id").focus()
