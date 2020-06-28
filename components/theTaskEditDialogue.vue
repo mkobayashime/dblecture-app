@@ -8,7 +8,7 @@
       .taskClass.section
         label 授業を選択
         select(v-model="newTask.taskClass" :class="{ error: newTask.taskClassError }" @blur="validateTaskClass")
-          option(v-for="item in classes") {{ item }}
+          option(v-for="item in classes") {{ item.className }}
       .taskDeadline.section
         label 締め切りを入力
         .datetime
@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import { mapMutations } from "vuex"
+import { mapGetters, mapMutations } from "vuex"
 export default {
   data() {
     return {
@@ -43,15 +43,13 @@ export default {
         deadlineHourError: "",
         deadlineMinute: "",
         deadlineMinuteError: ""
-      },
-      classes: [
-        "知能と情報科学",
-        "知識情報概論",
-        "線形代数A",
-        "データ工学概論",
-        "情報数学A"
-      ]
+      }
     }
+  },
+  computed: {
+    ...mapGetters({
+      classes: "classes/classes"
+    })
   },
   methods: {
     ...mapMutations({
