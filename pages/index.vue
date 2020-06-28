@@ -5,21 +5,29 @@
     theTasks(:userId="userId")
     theTaskDetail(:userId="userId")
     theActivity(:userId="userId")
+    theTaskEditDialogue(:userId="userId" v-if="showTaskEditDialogue")
 </template>
 
 <script>
+import { mapGetters } from "vuex"
 export default {
   components: {
     theProfile: () => import("~/components/theProfile.vue"),
     theClasses: () => import("~/components/theClasses.vue"),
     theTasks: () => import("~/components/theTasks.vue"),
     theTaskDetail: () => import("~/components/theTaskDetail.vue"),
-    theActivity: () => import("~/components/theActivity.vue")
+    theActivity: () => import("~/components/theActivity.vue"),
+    theTaskEditDialogue: () => import("~/components/theTaskEditDialogue.vue")
   },
   data() {
     return {
-      userId: "202099999"
+      userId: 202099999
     }
+  },
+  computed: {
+    ...mapGetters({
+      showTaskEditDialogue: "taskEditDialogue/show"
+    })
   }
 }
 </script>

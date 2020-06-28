@@ -1,5 +1,6 @@
 <template lang="pug">
   #the-tasks
+    button(@click="toggleTaskEditDialogue()") 課題を追加
     ul
       li.task(v-for="task in tasks" :key="task.id")
         input(type="checkbox").isDone
@@ -9,6 +10,7 @@
 </template>
 
 <script>
+import { mapMutations } from "vuex"
 export default {
   data() {
     return {
@@ -45,6 +47,11 @@ export default {
         }
       ]
     }
+  },
+  methods: {
+    ...mapMutations({
+      toggleTaskEditDialogue: "taskEditDialogue/toggle"
+    })
   }
 }
 </script>
@@ -56,6 +63,16 @@ export default {
   padding: 1.5rem
   margin: 2rem 0
   border-radius: 2rem
+  button
+    background-color: #1e88e5
+    outline: none
+    border: none
+    color: white
+    height: 2.5rem
+    padding: 0 1rem
+    border-radius: .5rem
+    margin-left: .5rem
+    cursor: pointer
   ul
     list-style: none
     display: flex
