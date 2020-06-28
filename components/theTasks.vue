@@ -2,62 +2,61 @@
   #the-tasks
     button(@click="toggleTaskEditDialogue()") 課題を追加
     ul
-      li.task(v-for="task in tasks" :key="task.id")
+      li.task(v-for="task, index in tasks" :key="task.id" @click="selectTask(index)" :class="{ selected: isSelected(index) }")
         input(type="checkbox").isDone
         p.name {{task.name}}
-        p.class {{task.theClass}}
+        p.class {{task.className}}
         p.deadline {{task.deadline}}
 </template>
 
 <script>
-import { mapMutations } from "vuex"
+import { mapGetters, mapMutations } from "vuex"
 export default {
-  data() {
-    return {
-      tasks: [
-        {
-          name: "第9回課題",
-          deadline: "Tomorrow",
-          theClass: "情報数学A"
-        },
-        {
-          name: "レポート10",
-          deadline: "Tomorrow",
-          theClass: "知能と情報科学"
-        },
-        {
-          name: "課題名サンプル",
-          deadline: "Tomorrow",
-          theClass: "情報リテラシー(講義)"
-        },
-        {
-          name: "長めの課題名サンプル",
-          deadline: "Tomorrow",
-          theClass: "データ工学概論"
-        },
-        {
-          name: "第7回課題",
-          deadline: "Tomorrow",
-          theClass: "情報メディア入門B"
-        },
-        {
-          name: "第8回課題",
-          deadline: "Tomorrow",
-          theClass: "情報数学A"
-        }
-      ]
+  props: {
+    userId: {
+      type: Number,
+      default: 0
     }
+  },
+  data() {
+    return {}
+  },
+  computed: {
+    ...mapGetters({
+      tasks: "tasks/tasks",
+      selectedIndex: "tasks/selectedIndex"
+    })
+  },
+  mounted() {
+    this.load()
   },
   methods: {
     ...mapMutations({
-      toggleTaskEditDialogue: "taskEditDialogue/toggle"
-    })
+      toggleTaskEditDialogue: "taskEditDialogue/toggle",
+      updateTaskData: "tasks/update",
+      selectTask: "tasks/select"
+    }),
+    async load() {
+      const res = await this.$axios.$get(
+        "http://turkey.slis.tsukuba.ac.jp/~s2010127/api/task.php",
+        {
+          params: {
+            userId: this.userId
+          }
+        }
+      )
+      this.updateTaskData(res)
+    },
+    isSelected(i) {
+      return this.selectedIndex === i
+    }
   }
 }
 </script>
 
 <style lang="sass" scoped>
 #the-tasks
+  position: relative
   background-color: #fff
   box-shadow: 0px 10px 15px 0px rgba(0,0,0,0.05)
   padding: 1.5rem
@@ -74,10 +73,16 @@ export default {
     margin-left: .5rem
     cursor: pointer
   ul
+    position: absolute
+    bottom: 0
+    margin-right: 2rem
+    width: calc(100% - 4rem)
+    height: calc(100% - 5rem)
     list-style: none
     display: flex
     flex-direction: column
     padding: .5rem
+    overflow-y: scroll
     li
       display: flex
       flex-direction: row
@@ -89,6 +94,8 @@ export default {
       border-radius: .5rem
       &:hover
         background-color: #eee
+      &.selected
+        background-color: #e3f2fd
       &::before
         content: ""
         position: absolute
@@ -98,6 +105,7 @@ export default {
         left: .5rem
         background-color: #eee
       &:last-of-type
+        margin-bottom: 1rem
         &::before
           display: none
       .isDone
