@@ -1,6 +1,6 @@
 export const state = () => ({
   tasks: [],
-  selectedIndex: -1
+  selectedIndex: 0
 })
 
 export const getters = {
