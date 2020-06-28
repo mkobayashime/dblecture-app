@@ -3,7 +3,7 @@
     button(@click="toggleTaskEditDialogue()") 課題を追加
     ul
       li.task(v-for="task, index in tasks" :key="task.id" @click="selectTask(index)" :class="{ selected: isSelected(index) }")
-        input(type="checkbox").isDone
+        //- input(type="checkbox").isDone
         p.name {{task.name}}
         p.class {{task.className}}
         p.deadline {{task.deadline}}
@@ -122,6 +122,7 @@ export default {
         flex-shrink: 0
       .name
         width: 50%
+        margin-left: 1rem
       .class
         width: 30%
         font-size: .8rem
