@@ -4,7 +4,7 @@
     theClasses(:userId="userId")
     theTasks(:userId="userId")
     theTaskDetail(:userId="userId")
-    theActivity(:userId="userId")
+    //- theActivity(:userId="userId")
     theTaskEditDialogue(:userId="userId" v-if="showTaskEditDialogue")
 </template>
 
@@ -16,7 +16,7 @@ export default {
     theClasses: () => import("~/components/theClasses.vue"),
     theTasks: () => import("~/components/theTasks.vue"),
     theTaskDetail: () => import("~/components/theTaskDetail.vue"),
-    theActivity: () => import("~/components/theActivity.vue"),
+    // theActivity: () => import("~/components/theActivity.vue"),
     theTaskEditDialogue: () => import("~/components/theTaskEditDialogue.vue")
   },
   data() {
@@ -53,9 +53,9 @@ export default {
     grid-row: 1/-1
     grid-column: 2/3
   #the-task-detail
-    grid-row: 1/3
+    grid-row: 1/4
     grid-column: -2/-1
-  #the-activity
-    grid-row: -2/-1
-    grid-column: -2/-1
+  // #the-activity
+  //   grid-row: -2/-1
+  //   grid-column: -2/-1
 </style>
