@@ -1,13 +1,15 @@
 export const state = () => ({
   classes: [],
   classIds: [],
-  classNames: []
+  classNames: [],
+  selectedIndex: -1
 })
 
 export const getters = {
   classes: (state) => state.classes,
   classIds: (state) => state.classIds,
-  classNames: (state) => state.classNames
+  classNames: (state) => state.classNames,
+  selectedIndex: (state) => state.selectedIndex
 }
 
 export const mutations = {
@@ -17,5 +19,12 @@ export const mutations = {
       state.classIds.push(item.classId)
       state.classNames.push(item.className)
     })
+  },
+  select(state, index) {
+    if (state.selectedIndex !== index) {
+      state.selectedIndex = index
+    } else {
+      state.selectedIndex = -1
+    }
   }
 }

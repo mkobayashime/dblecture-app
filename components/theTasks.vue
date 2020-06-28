@@ -24,8 +24,16 @@ export default {
   computed: {
     ...mapGetters({
       tasks: "tasks/tasks",
-      selectedIndex: "tasks/selectedIndex"
+      selectedTaskIndex: "tasks/selectedIndex",
+      classIds: "classes/classIds",
+      selectedClassIndex: "classes/selectedIndex"
     })
+  },
+  watch: {
+    selectedClassIndex() {
+      this.filterClassId = this.classIds[this.selectedClassIndex]
+      this.load()
+    }
   },
   mounted() {
     this.load()
@@ -41,14 +49,15 @@ export default {
         "http://turkey.slis.tsukuba.ac.jp/~s2010127/api/task.php",
         {
           params: {
-            userId: this.userId
+            userId: this.userId,
+            filterClassId: this.filterClassId
           }
         }
       )
       this.updateTaskData(res)
     },
     isSelected(i) {
-      return this.selectedIndex === i
+      return this.selectedTaskIndex === i
     }
   }
 }
