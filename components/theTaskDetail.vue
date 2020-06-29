@@ -41,7 +41,6 @@ export default {
       selectClass: "classes/select"
     }),
     getSelectedTask() {
-      // console.log(this.tasks[this.selectedIndex])
       return this.tasks[this.selectedIndex]
     },
     isShow() {
@@ -62,11 +61,7 @@ export default {
           "http://turkey.slis.tsukuba.ac.jp/~s2010127/api/task.php",
           params
         )
-        .then((res) => {
-          // this.selectClass(-1)
-          // this.updateTaskData(res)
-          // console.log(res)
-        })
+        .then((res) => {})
     },
     deleteTask() {
       const params = new URLSearchParams()
@@ -123,8 +118,11 @@ export default {
       justify-content: space-between
       .task-name
         font-size: 1.2rem
+        width: 30%
+        flex-grow: 1
       .class-name
         color: #9e9e9e
+        flex-shrink: 0
     .content
       color: #9e9e9e
       margin-top: 1rem
