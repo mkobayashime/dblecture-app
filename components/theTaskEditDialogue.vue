@@ -101,7 +101,11 @@ export default {
       }
     },
     validateDeadlineHour() {
-      if (this.newTask.deadlineHour >= 0 && this.newTask.deadlineHour <= 24) {
+      if (
+        this.newTask.deadlineHour.length > 0 &&
+        this.newTask.deadlineHour >= 0 &&
+        this.newTask.deadlineHour <= 24
+      ) {
         this.newTask.deadlineHourError = false
       } else {
         this.newTask.deadlineHourError = true
@@ -109,6 +113,7 @@ export default {
     },
     validateDeadlineMinute() {
       if (
+        this.newTask.deadlineMinute.length > 0 &&
         this.newTask.deadlineMinute >= 0 &&
         this.newTask.deadlineMinute <= 60
       ) {
@@ -118,6 +123,13 @@ export default {
       }
     },
     validateAll() {
+      this.validateTaskName()
+      this.validateTaskClass()
+      this.validateDeadlineYear()
+      this.validateDeadlineMonth()
+      this.validateDeadlineDay()
+      this.validateDeadlineHour()
+      this.validateDeadlineMinute()
       if (
         !this.newTask.taskNameError &&
         !this.newTask.taskClassError &&
