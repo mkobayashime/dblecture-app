@@ -63,12 +63,17 @@ export default {
     relativeDeadline(deadlineString) {
       const now = dayjs()
       const target = dayjs(deadlineString, "YYYY-MM-DD HH:mm")
-      const diffDays = target.diff(now, "day") + 1
+      const diffDays = target.diff(now, "day")
 
-      if (diffDays <= 1) {
-        return "Tomorrow"
+      if (diffDays <= 0) {
+        const diffSeconds = target.diff(now, "second")
+        if (diffSeconds < 0) {
+          return "Overdue"
+        } else {
+          return "Tomorrow"
+        }
       } else {
-        return `in ${diffDays} days`
+        return `in ${diffDays + 1} days`
       }
     },
     isSelected(i) {
