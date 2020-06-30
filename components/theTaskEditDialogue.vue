@@ -65,6 +65,18 @@ export default {
       toggleTaskEditDialogue: "taskEditDialogue/toggle",
       updateTaskData: "tasks/update"
     }),
+    async load() {
+      const res = await this.$axios.$get(
+        "http://turkey.slis.tsukuba.ac.jp/~s2010127/api/task.php",
+        {
+          params: {
+            userId: this.userId,
+            filterClassId: this.filterClassId
+          }
+        }
+      )
+      this.updateTaskData(res)
+    },
     validateTaskName() {
       if (this.newTask.taskName.length > 0) {
         this.newTask.taskNameError = false
@@ -168,6 +180,29 @@ export default {
         .then((res) => {
           this.updateTaskData(res)
           this.toggleTaskEditDialogue()
+
+          this.$axios
+            .$get(
+              "http://turkey.slis.tsukuba.ac.jp/~s2010127/api/get-task-id.php",
+              {
+                params: {
+                  taskClassId,
+                  taskName: this.newTask.taskName
+                }
+              }
+            )
+            .then((res) => {
+              params.append("method", "init")
+              params.append("taskId", res.taskId)
+              this.$axios
+                .$post(
+                  "http://turkey.slis.tsukuba.ac.jp/~s2010127/api/task-status.php",
+                  params
+                )
+                .then(() => {
+                  this.load()
+                })
+            })
         })
     },
     getDoubleDigits(num) {
