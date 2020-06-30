@@ -6,11 +6,15 @@
         input(type="checkbox" :checked="isDone(task.submitDate)" @input="toggleDone($event.target)" :class-id="task.classId" :task-id="task.taskId").isDone
         p.name {{ task.name }}
         p.class {{ task.className }}
-        p.deadline {{ task.deadline }}
+        p.deadline {{ relativeDeadline(task.deadline) }}
 </template>
 
 <script>
 import { mapGetters, mapMutations } from "vuex"
+import dayjs from "dayjs"
+import customParseFormat from "dayjs/plugin/customParseFormat"
+dayjs.extend(customParseFormat)
+
 export default {
   props: {
     userId: {
@@ -55,6 +59,17 @@ export default {
         }
       )
       this.updateTaskData(res)
+    },
+    relativeDeadline(deadlineString) {
+      const now = dayjs()
+      const target = dayjs(deadlineString, "YYYY-MM-DD HH:mm")
+      const diffDays = target.diff(now, "day") + 1
+
+      if (diffDays <= 1) {
+        return "Tomorrow"
+      } else {
+        return `in ${diffDays} days`
+      }
     },
     isSelected(i) {
       return this.selectedTaskIndex === i
