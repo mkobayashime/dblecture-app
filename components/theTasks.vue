@@ -2,11 +2,11 @@
   #the-tasks
     button(@click="toggleTaskEditDialogue()") 課題を追加
     ul
-      li.task(v-for="task, index in tasks" :key="task.id" @click="selectTask(index)" :class="{ selected: isSelected(index) }")
-        //- input(type="checkbox").isDone
-        p.name {{task.name}}
-        p.class {{task.className}}
-        p.deadline {{task.deadline}}
+      li.task(v-for="task, index in tasks" :key="task.classId + task.taskId" @click="selectTask(index)" :class="{ selected: isSelected(index), done: isDone(task.submitDate)}")
+        input(type="checkbox" :checked="isDone(task.submitDate)" @input="toggleDone($event.target)" :class-id="task.classId" :task-id="task.taskId").isDone
+        p.name {{ task.name }}
+        p.class {{ task.className }}
+        p.deadline {{ task.deadline }}
 </template>
 
 <script>
@@ -58,6 +58,37 @@ export default {
     },
     isSelected(i) {
       return this.selectedTaskIndex === i
+    },
+    isDone(submitDate) {
+      return submitDate !== null
+    },
+    toggleDone(target) {
+      const params = new URLSearchParams()
+      params.append("userId", this.userId)
+      params.append("taskClassId", target.attributes["class-id"].value)
+      params.append("taskId", target.attributes["task-id"].value)
+
+      if (target.checked) {
+        params.append("method", "done")
+        this.$axios
+          .$post(
+            "http://turkey.slis.tsukuba.ac.jp/~s2010127/api/task-status.php",
+            params
+          )
+          .then(() => {
+            this.load()
+          })
+      } else {
+        params.append("method", "undone")
+        this.$axios
+          .$post(
+            "http://turkey.slis.tsukuba.ac.jp/~s2010127/api/task-status.php",
+            params
+          )
+          .then(() => {
+            this.load()
+          })
+      }
     }
   }
 }
@@ -133,4 +164,9 @@ export default {
         text-align: right
         font-size: .8rem
         color: #bdbdbd
+      &.done
+        .name
+          color: #bdbdbd
+        .class
+          color: #bdbdbd
 </style>
