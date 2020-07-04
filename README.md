@@ -1,8 +1,14 @@
 # dblecture-app
 
-> My well-made Nuxt.js project
+2020年度開講[データ工学概論](https://kdb.tsukuba.ac.jp/syllabi/2020/GC13201/jpn/0/)の最終課題として制作したシステムのフロントエンドです
+
+システムの概要やデータベースの構成は [dblecture-archive](https://github.com/mkobayashime/dblecture-archive) にアーカイブとして残しています
+
+![screenshot](https://raw.githubusercontent.com/mkobayashime/dblecture-archive/master/img/screenshot.png)
 
 ## Build Setup
+
+[Nuxt.js](https://github.com/nuxt/nuxt.js) を用いた SPA として記述しています
 
 ```bash
 # install dependencies
