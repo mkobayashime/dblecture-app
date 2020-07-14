@@ -5,7 +5,8 @@
     theTasks(:userId="userId")
     theTaskDetail(:userId="userId")
     //- theActivity(:userId="userId")
-    theTaskEditDialogue(:userId="userId" v-if="showTaskEditDialogue")
+    transition(name="dialogue-fade")
+      theTaskEditDialogue(:userId="userId" v-if="showTaskEditDialogue")
 </template>
 
 <script>
@@ -58,4 +59,10 @@ export default {
   // #the-activity
   //   grid-row: -2/-1
   //   grid-column: -2/-1
+  .dialogue-fade-enter-active
+    transition: all 200ms linear
+  .dialogue-fade-leave-active
+    transition: all 200ms linear
+  .dialogue-fade-enter, .dialogue-fade-leave-to
+    opacity: 0
 </style>
